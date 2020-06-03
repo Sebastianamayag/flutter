@@ -24,25 +24,25 @@ function Conectarse($host,$puerto,$user,$pw,$db) {
 $link = Conectarse($host,$puerto,$user,$pw,$db);
 //metodo para ver los datos
 if ($_SERVER['REQUEST_METHOD'] == 'GET'){
-	if (isset($_GET['id'])){
+	if (isset($_GET['categoria'])){
      $categoria=$_POST['categoriaProductos'];	
-	 $query="SELECT * FROM productos WHERE catergoriaProductos=$categoria";
+	 $query='SELECT * FROM productos WHERE catergoriaProductos="'.$categoria.'"';
  	 $result = mysqli_query($link,$query);
  	 header("HTTP/1.1 200 OK");
-	 while ($row=$result->fetch_assoc()){ 
-	 $array = array('url' =>$row['url']);
-     $json = json_encode($array);
-	 echo $json;
-	}
+	 while($extraerDatos=$result->fetch_assoc()){
+        $resultado[]=$extraerDatos;
+    }
+        $json = json_encode($resultado);
+           echo $json;
 	}else{
      $query="SELECT * FROM productos";
  	 $result = mysqli_query($link,$query);
  	 header("HTTP/1.1 200 OK");
-  	 while ($row=$result->fetch_assoc()){ 
-  	 	$array = array('url' =>$row['url']);
-		   $json = json_encode($array);
-		 echo $json."<br>";
-    	}
+  	while($extraerDatos=$result->fetch_assoc()){
+        $resultado[]=$extraerDatos;
+    }
+        $json = json_encode($resultado);
+           echo $json;
 	}
 }
 header("HTTP/1.1 400 Bad Request");
